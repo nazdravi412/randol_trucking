@@ -1,5 +1,7 @@
 # Randolio: Trucking
 
+Nazdravi Update: I added functionality to select a route at clock in. I also added an ox_lib menu to view routes/return to depot at any time. /routes command to bring this meny up when you need it. Otherwise, it will pop up once you deliver a trailer.
+
 **ESX/QB support with bridge**
 
 A modern trucking job with a built in queue system to generate new routes to all those in the queue every x amount of minutes.
