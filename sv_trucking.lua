@@ -91,6 +91,7 @@ lib.callback.register('randol_trucking:server:clockIn', function(source)
     queue[#queue+1] = cid
     storedRoutes[cid] = { routes = {}, vehicle = 0, }
     Player(src).state:set('truckDuty', true, true)
+    initQueue()
 
     DoNotification(src, 'You have clocked in for trucking work. Look out for job notifications or check your current routes.', 'success', 7000)
     return true
@@ -277,7 +278,7 @@ function OnPlayerUnload(source)
     end
 end
 
-local function initQueue()
+function initQueue()
     if #queue == 0 then return end
 
     for i = 1, #queue do
@@ -294,3 +295,10 @@ local function initQueue()
 end
 
 SetInterval(initQueue, Server.QueueTimer * 60000)
+
+lib.addCommand('routes', {
+    help = 'See your routes for trucking job.',
+}, function(source, args, raw)
+	local src = source
+    TriggerClientEvent('viewRoutes', src)
+end)

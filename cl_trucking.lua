@@ -81,7 +81,7 @@ end
 local function nearZone(point)
     DrawMarker(1, point.coords.x, point.coords.y, point.coords.z - 1, 0, 0, 0, 0, 0, 0, 6.0, 6.0, 1.5, 79, 194, 247, 165, 0, 0, 0,0)
     
-    if point.isClosest and point.currentDistance <= 4 then
+    if point.isClosest and point.currentDistance <= 15 then
         if not showText then
             showText = true
             lib.showTextUI('**E** - Deliver Trailer', {position = 'left-center'})
@@ -105,6 +105,7 @@ local function nearZone(point)
                     lib.callback.await('randol_trucking:server:updateRoute', false, NetworkGetNetworkIdFromEntity(activeTrailer), activeRoute)
                     FreezeEntityPosition(cache.vehicle, false)
                     cleanupShit()
+                    lib.showMenu('view_routes')
                 end
             end
         end
@@ -183,6 +184,7 @@ local function spawnPed()
                 end,
                 action = function()
                     lib.callback.await('randol_trucking:server:clockIn', false)
+                    DoNotification("Use /routes to see your available routes at any time.")
                 end,
             },
             { 
@@ -288,3 +290,45 @@ function OnPlayerUnload()
     removePedSpawned()
     cleanupShit()
 end
+
+-- Add register menu to view routes
+-- Trigger server initQueue() and then pop up menu to view next route.
+--Ox_Lib Menu
+trafficMenu = lib.registerMenu({
+    id = 'view_routes',
+    title = 'Delivery Routes',
+    position = 'top-right',
+    onSelected = function(selected, secondary, args)
+        if not secondary then
+        else
+            if args.isCheck then
+                if selected == 4 and secondary then
+                end
+            end
+            if args.isScroll then
+            end
+        end
+    end,
+    onCheck = function(selected, checked, args)
+    end,
+    onClose = function(keyPressed)
+        if keyPressed then
+        end
+    end,
+    options = {
+        {label = 'View Routes', close = true},
+        {label = 'Return Truck', close = true}
+    }
+}, function(selected, scrollIndex, args)
+    if selected == 1 then
+        viewRoutes()
+    else
+        cleanupShit()
+        SetNewWaypoint(1190.82, -3099.81)
+    end
+end)
+
+RegisterNetEvent('viewRoutes')
+AddEventHandler('viewRoutes', function ()
+    lib.showMenu('view_routes')
+end)
